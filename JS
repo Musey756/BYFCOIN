@@ -1,0 +1,46 @@
+// Import Web3 library
+const Web3 = require('web3');
+
+// Connect to a Web3 provider (e.g., MetaMask)
+const web3 = new Web3(Web3.givenProvider);
+
+// Contract ABI (copy from the compiled contract)
+const abi = [...]; // ABI of your BYFCOIN contract
+
+// Contract address (deployed address)
+const contractAddress = '0x123...'; // Address of your deployed contract
+
+// Instantiate the contract
+const contract = new web3.eth.Contract(abi, contractAddress);
+
+// Example function to get the balance of an address
+async function getBalance(address) {
+    try {
+        const balance = await contract.methods.balanceOf(address).call();
+        console.log(`Balance of ${address}: ${balance}`);
+    } catch (error) {
+        console.error('Error getting balance:', error);
+    }
+}
+
+// Example function to buy BYF tokens
+async function buyTokens(ethAmount) {
+    try {
+        // Send transaction to the contract's buyBYF function
+        await contract.methods.buyBYF(ethAmount).send({ from: '0xsenderAddress', value: web3.utils.toWei(ethAmount.toString(), 'ether') });
+        console.log(`Bought ${ethAmount} ETH worth of BYF tokens`);
+    } catch (error) {
+        console.error('Error buying tokens:', error);
+    }
+}
+
+// Example function to sell BYF tokens
+async function sellTokens(byfAmount) {
+    try {
+        // Send transaction to the contract's sellBYF function
+        await contract.methods.sellBYF(byfAmount).send({ from: '0xsenderAddress' });
+        console.log(`Sold ${byfAmount} BYF tokens`);
+    } catch (error) {
+        console.error('Error selling tokens:', error);
+    }
+}
